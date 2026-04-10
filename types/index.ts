@@ -1,0 +1,62 @@
+export type Role = 'user' | 'admin';
+
+export type User = {
+  _id: string;
+  name: string;
+  email: string;
+  tel: string;
+  role: Role;
+};
+
+export type Hotel = {
+  _id: string;
+  name: string;
+  address: string;
+  district: string;
+  province: string;
+  postalcode: string;
+  region: string;
+  tel: string;
+  image?: string;
+};
+
+export type Booking = {
+  _id: string;
+  user: string | User;
+  hotel: string | Hotel;
+  checkInDate: string;
+  checkOutDate: string;
+  createdAt?: string;
+};
+
+export type RegisterInput = {
+  name: string;
+  email: string;
+  tel: string;
+  password: string;
+};
+
+export type LoginInput = {
+  identifier: string;
+  password: string;
+};
+
+export type BookingInput = {
+  hotelId: string;
+  checkInDate: string;
+  checkOutDate: string;
+};
+
+export type ApiListResponse<T> = {
+  success: boolean;
+  count?: number;
+  data: T[];
+};
+
+export type ApiItemResponse<T> = {
+  success: boolean;
+  data: T;
+  token?: string;
+  msg?: string;
+  message?: string;
+};
