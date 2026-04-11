@@ -2,21 +2,11 @@
 
 import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ImagePlus, LoaderCircle, Wifi, UtensilsCrossed, Bath, Refrigerator, Tv, Wind, ShieldCheck } from 'lucide-react';
+import { ImagePlus, LoaderCircle } from 'lucide-react';
+import { FACILITY_OPTIONS } from '@/src/constants/facilities';
 import { createRoom, formatApiMessage } from '@/src/lib/api';
 import { useApp } from '@/src/context/AppContext';
 import { RoomInput } from '@/types';
-
-const FACILITY_OPTIONS = [
-  { label: 'Free Wi-Fi', icon: Wifi },
-  { label: 'Breakfast', icon: UtensilsCrossed },
-  { label: 'Shower', icon: Bath },
-  { label: 'Refrigerator', icon: Refrigerator },
-  { label: 'TV', icon: Tv },
-  { label: 'Air Conditioning', icon: Wind },
-  { label: 'Smoke Alarm', icon: ShieldCheck },
-  { label: 'Non-Smoking', icon: ShieldCheck },
-] as const;
 
 type Props = {
   hotelId: string;
