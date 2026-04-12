@@ -26,6 +26,7 @@ export default function MyBookingPage() {
         rows={bookings}
         title="My bookings"
         emptyText="You have not created any booking yet. Go to the Booking page to start one."
+        editBasePath="/user/bookings"
       />
     </main>
   );

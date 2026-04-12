@@ -1,5 +1,6 @@
 import { Hotel } from "@/types";
 import { Mail, Phone } from "lucide-react";
+import { HotelInfoData } from '@/src/lib/mockHotelDetail';
 
 export default function HotelInfo({ hotel }: { hotel: Hotel }) {
   return (

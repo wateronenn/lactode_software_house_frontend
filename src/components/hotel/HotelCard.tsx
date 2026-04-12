@@ -32,7 +32,7 @@ export default function HotelCard({ hotel }: { hotel: Hotel }) {
             <p className="text-xl font-bold text-slate-900">Up to 3 Nights</p>
           </div>
           <Link
-            href={`/booking?hotelId=${hotel._id}`}
+            href={`/user/bookings/create?hotelId=${hotel._id}`}
             className="rounded-2xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
           >
             Book now

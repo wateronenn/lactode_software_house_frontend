@@ -95,6 +95,14 @@ export async function createRoom(input: RoomInput, token: string): Promise<Room>
   return response.data;
 }
 
+export async function getRoomById(hotelId: string, roomId: string): Promise<Room> {
+  const response = await request<{ success: boolean; data: Room }>(
+    `/hotels/${hotelId}/rooms/${roomId}`,
+    { method: 'GET' }
+  );
+  return response.data;
+}
+
 export async function getBookings(token: string): Promise<Booking[]> {
   const response = await request<{ success: boolean; data: Booking[] }>('/bookings', { method: 'GET' }, token);
   return response.data;

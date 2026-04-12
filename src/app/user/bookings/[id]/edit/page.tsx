@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import BookingForm from '@/src/components/BookingForm';
+import BookingForm from '@/src/components/booking/BookingForm';
 import { useApp } from '@/src/context/AppContext';
 
 export default function EditBookingPage() {

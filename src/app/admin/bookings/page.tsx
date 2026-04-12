@@ -27,6 +27,7 @@ export default function AdminBookingsPage() {
         title="Admin booking management"
         emptyText="No booking record yet."
         isAdmin
+        editBasePath="/admin/bookings"
       />
     </main>
   );

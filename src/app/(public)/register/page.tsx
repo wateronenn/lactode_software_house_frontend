@@ -34,7 +34,7 @@ export default function RegisterPage() {
             setMessage(result.message);
             setSubmitting(false);
             if (result.ok) {
-              setTimeout(() => router.push('/login'), 700);
+              setTimeout(() => router.push('/signin'), 700);
             }
           }}
         >

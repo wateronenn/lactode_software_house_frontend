@@ -10,6 +10,7 @@ type Props = {
   title: string;
   emptyText: string;
   isAdmin?: boolean;
+  editBasePath?: string;
 };
 
 const getHotel = (hotel: Booking['hotel']) => (typeof hotel === 'string' ? null : (hotel as Hotel));
@@ -25,7 +26,13 @@ function countNights(checkInDate: string, checkOutDate: string) {
   return Math.max(0, Math.round((end - start) / (1000 * 60 * 60 * 24)));
 }
 
-export default function BookingTable({ rows, title, emptyText, isAdmin = false }: Props) {
+export default function BookingTable({
+  rows,
+  title,
+  emptyText,
+  isAdmin = false,
+  editBasePath = '/user/bookings',
+}: Props) {
   const { deleteBooking } = useApp();
   const [message, setMessage] = useState('');
 
@@ -76,7 +83,7 @@ export default function BookingTable({ rows, title, emptyText, isAdmin = false }
                 <div className="text-sm font-medium text-slate-700">{nights}</div>
                 <div className="flex flex-wrap gap-2">
                   <Link
-                    href={`/edit-booking/${booking._id}`}
+                    href={`${editBasePath}/${booking._id}/edit`}
                     className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                   >
                     Edit

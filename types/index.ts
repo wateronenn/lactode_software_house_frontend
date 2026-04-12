@@ -37,6 +37,7 @@ export type Room = {
   _id: string;
   hotel?: string | Hotel;
   picture: string[];
+  image?: string | null;
   roomType: string;
   price: number;
   people: number;
@@ -45,6 +46,7 @@ export type Room = {
   description: string;
   facilities: string[];
   avaliableNumber: number;
+  availableNumber?: number;
   status: string;
 };
 

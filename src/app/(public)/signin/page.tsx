@@ -26,7 +26,7 @@ export default function LoginPage() {
             setMessage(result.message);
             setSubmitting(false);
             if (result.ok) {
-              router.push('/hotel');
+              router.push('/hotels');
             }
           }}
         >

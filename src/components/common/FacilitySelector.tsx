@@ -1,5 +1,5 @@
 import FacilityBadge from './FacilityBadge';
-import { FACILITY_OPTIONS } from '@/src/constants/hotelFacilities';
+import { FACILITY_OPTIONS } from '@/src/constants/facilities';
 
 interface Props {
   options: string[];

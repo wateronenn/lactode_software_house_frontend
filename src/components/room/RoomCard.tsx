@@ -1,11 +1,12 @@
 import { User } from "lucide-react";
 import Button from "../common/Button";
+import { RoomCardData } from '@/src/lib/mockHotelDetail';
 
 // ── Props ────────────────────────────────────────────────────────────────────
 
 interface RoomCardProps {
-  room: Room;
-  onDetail?: (room: Room) => void;
+  room: RoomCardData;
+  onDetail?: (room: RoomCardData) => void;
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
