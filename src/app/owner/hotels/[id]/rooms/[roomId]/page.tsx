@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useApp } from '@/src/context/AppContext';
 import { FACILITY_OPTIONS } from '@/src/constants/facilities';
+import { formatApiMessage, getHotelById, getRoomById } from '@/src/lib/api';
 import { Hotel, Room } from '@/types';
 
 // ── Icon helpers ──────────────────────────────────────────
@@ -55,48 +56,64 @@ export default function RoomDetailPage() {
 
   const { user, hotels, ready, loading } = useApp();
 
-  const [hotel, setHotel]       = useState<Hotel | null>(null);
-  const [room, setRoom]         = useState<Room | null>(null);
-  const [fetching, setFetching] = useState(true);
-  const [error, setError]       = useState<string | null>(null);
+  const cachedHotel = useMemo(
+    () => (hotelId ? hotels.find((item) => item._id === hotelId) ?? null : null),
+    [hotelId, hotels]
+  );
 
-  const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:5000/api/v1';
+  const [hotel, setHotel]       = useState<Hotel | null>(cachedHotel);
+  const [room, setRoom]         = useState<Room | null>(null);
+  const [fetching, setFetching] = useState(false);
+  const [error, setError]       = useState<string | null>(null);
 
   // ── Fetch hotel + room data ───────────────────────────
   useEffect(() => {
     if (!ready) return;
 
+    if (!hotelId) {
+      setHotel(null);
+      setRoom(null);
+      setError('No hotel ID provided.');
+      setFetching(false);
+      return;
+    }
+
+    let cancelled = false;
+
     (async () => {
       try {
-        // 1. Find hotel from context cache first
-        let foundHotel = hotels.find((h) => h._id === hotelId) ?? null;
-
-        // 2. If not in cache, fetch from API
-        if (!foundHotel && hotelId) {
-          const res  = await fetch(`${API}/hotels/${hotelId}`, { cache: 'no-store' });
-          const data = await res.json();
-          if (!res.ok || data.success === false)
-            throw new Error(data.message ?? 'Failed to load hotel');
-          foundHotel = data.data as Hotel;
+        setFetching(true);
+        setError(null);
+        const hotelData = cachedHotel ?? await getHotelById(hotelId);
+        if (!cancelled) {
+          setHotel(hotelData);
         }
-        setHotel(foundHotel);
 
-        // 3. If roomId provided, fetch the specific room
-        // Route: GET /hotels/:hotelId/rooms/:roomId
         if (roomId) {
-          const res  = await fetch(`${API}/hotels/${hotelId}/rooms/${roomId}`, { cache: 'no-store' });
-          const data = await res.json();
-          if (!res.ok || data.success === false)
-            throw new Error(data.message ?? 'Failed to load room');
-          setRoom(data.data as Room);
+          const roomData = await getRoomById(hotelId, roomId);
+          if (!cancelled) {
+            setRoom(roomData);
+          }
+        } else if (!cancelled) {
+          setRoom(null);
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Could not load data.');
+        if (!cancelled) {
+          setHotel(null);
+          setRoom(null);
+          setError(formatApiMessage(e, 'Could not load data.'));
+        }
       } finally {
-        setFetching(false);
+        if (!cancelled) {
+          setFetching(false);
+        }
       }
     })();
-  }, [ready, hotelId, roomId, hotels, API]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cachedHotel, hotelId, roomId, ready]);
 
   // ── Loading ───────────────────────────────────────────
   if (!ready || loading || fetching) {
@@ -118,7 +135,7 @@ export default function RoomDetailPage() {
           {error ?? 'Hotel not found.'}
         </div>
         <button
-          onClick={() => router.push('/hotel')}
+          onClick={() => router.push('/owner/hotels')}
           className="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-medium transition hover:bg-slate-50"
         >
           ← Back to hotels
@@ -137,7 +154,7 @@ export default function RoomDetailPage() {
   const displayPeople      = room?.people ?? null;
   const displayBedType     = room?.bedType ?? null;
   const displayBedCount    = room?.bed ?? null;
-  const displayAvailable   = room?.avaliableNumber ?? null;
+  const displayAvailable   = room?.avaliableNumber ?? room?.availableNumber ?? null;
 
   // Facilities: use real room facilities if available,
   // otherwise show all FACILITY_OPTIONS as a preview
@@ -146,9 +163,9 @@ export default function RoomDetailPage() {
   // ── Book button — auth-aware ──────────────────────────
   const handleBook = () => {
     if (user) {
-      router.push(`/booking?hotelId=${hotel._id}${room ? `&roomId=${room._id}` : ''}`);
+      router.push(`/user/bookings/create?hotelId=${hotel._id}${room ? `&roomId=${room._id}` : ''}`);
     } else {
-      router.push('/login');
+      router.push('/signin');
     }
   };
 

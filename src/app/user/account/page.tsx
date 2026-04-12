@@ -67,7 +67,7 @@ export default function ProfilePage() {
 
           <div className="mt-8 flex justify-center gap-4">
             <Link
-              href="/login"
+              href="/signin"
               className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
             >
               Go to Login
@@ -442,7 +442,7 @@ export default function ProfilePage() {
 
             <div className="mt-6 flex flex-wrap gap-4">
               <Link
-                href="/hotel"
+                href="/hotels"
                 className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
               >
                 Book a Hotel
@@ -450,7 +450,7 @@ export default function ProfilePage() {
 
               {user.role === 'user' && (
                 <Link
-                href="/my-booking"
+                href="/user/bookings"
                 className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
                 >
                   My Bookings

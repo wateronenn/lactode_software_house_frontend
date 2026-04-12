@@ -1,3 +1,7 @@
+type PhotoGridProps = {
+  images: string[];
+};
+
 export default function PhotoGrid({ images }: PhotoGridProps) {
   const GRID_HEIGHT = "420px";
 

@@ -74,6 +74,11 @@ export async function getHotels(): Promise<Hotel[]> {
   return response.data;
 }
 
+export async function getHotelById(id: string): Promise<Hotel> {
+  const response = await request<{ success: boolean; data: Hotel }>(`/hotels/${id}`, { method: 'GET' });
+  return response.data;
+}
+
 export async function createRoom(input: RoomInput, token: string): Promise<Room> {
   const response = await request<{ success: boolean; data: Room }>(
     `/hotels/${input.hotelId}/rooms`,
@@ -97,6 +102,14 @@ export async function createRoom(input: RoomInput, token: string): Promise<Room>
     token
   );
 
+  return response.data;
+}
+
+export async function getRoomById(hotelId: string, roomId: string): Promise<Room> {
+  const response = await request<{ success: boolean; data: Room }>(
+    `/hotels/${hotelId}/rooms/${roomId}`,
+    { method: 'GET' }
+  );
   return response.data;
 }
 

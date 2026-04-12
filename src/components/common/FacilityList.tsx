@@ -1,5 +1,5 @@
 import FacilityBadge from './FacilityBadge';
-import { FACILITY_OPTIONS } from '@/src/constants/hotelFacilities';
+import { FACILITY_OPTIONS } from '@/src/constants/facilities';
 
 type Props = {
   facilities: string[];
@@ -15,7 +15,6 @@ export default function FacilityList({ facilities }: Props) {
           key={label}
           label={label}
           icon={icon}
-          active={false}
         />
       ))}
     </div>

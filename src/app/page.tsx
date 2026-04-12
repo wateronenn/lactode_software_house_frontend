@@ -5,6 +5,13 @@ import { LogIn } from 'lucide-react';
 import { useApp } from '@/src/context/AppContext';
 
 export default function ExamplePage() {
+  const makeUser = (name: string, role: 'user' | 'hotel owner' | 'admin') => ({
+    _id: `${role}-${name.toLowerCase()}`,
+    name,
+    email: `${name.toLowerCase()}@example.com`,
+    tel: '012-345-6789',
+    role,
+  });
   const { setUser, logoutUser } = useApp(); // 👈 เพิ่มตรงนี้
 
   return (
@@ -12,19 +19,15 @@ export default function ExamplePage() {
 
       {/* 🔥 TEST ROLE */}
       <div className="flex gap-3 flex-wrap">
-        <button onClick={() => setUser({ name: 'Guest', role: 'guest' })} className="border px-3 py-1 rounded-full">
-          Guest
-        </button>
-
-        <button onClick={() => setUser({ name: 'Jame', role: 'user' })} className="border px-3 py-1 rounded-full">
+        <button onClick={() => setUser(makeUser('Jame', 'user'))} className="border px-3 py-1 rounded-full">
           User
         </button>
 
-        <button onClick={() => setUser({ name: 'Owner', role: 'hotel owner' })} className="border px-3 py-1 rounded-full">
+        <button onClick={() => setUser(makeUser('Owner', 'hotel owner'))} className="border px-3 py-1 rounded-full">
           Owner
         </button>
 
-        <button onClick={() => setUser({ name: 'Admin', role: 'admin' })} className="border px-3 py-1 rounded-full">
+        <button onClick={() => setUser(makeUser('Admin', 'admin'))} className="border px-3 py-1 rounded-full">
           Admin
         </button>
 

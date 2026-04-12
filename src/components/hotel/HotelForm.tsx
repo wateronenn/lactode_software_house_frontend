@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import FacilitySelector from '../common/FacilitySelector';
-import { FACILITY_OPTIONS } from '@/src/constants/hotelFacilities';
+import { FACILITY_OPTIONS } from '@/src/constants/facilities';
 
 export interface HotelFormData {
   name: string;
