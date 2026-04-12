@@ -20,7 +20,7 @@ export default function Hero() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/hotel"
+              href="/hotels"
               className="inline-flex items-center gap-3 rounded-2xl bg-brand-500 px-7 py-4 text-lg font-bold text-white shadow-soft transition hover:bg-brand-600"
             >
               <Search className="h-6 w-6" /> Browse Hotels

@@ -1,10 +1,16 @@
 'use client'
-import FacilityList, { MOCK_FACILITIES } from "@/src/components/common/FacilityList";
-import PhotoGrid, { MOCK_IMAGES } from "@/src/components/common/PhotoGrid";
+import FacilityList from "@/src/components/common/FacilityList";
+import PhotoGrid from "@/src/components/common/PhotoGrid";
 import AvailabilitySearch from "@/src/components/common/AvailabilitySearch";
-import HotelInfo, { MOCK_HOTEL_INFO } from "@/src/components/hotel/HotelInfo";
-import RoomCard, { MOCK_ROOMS } from "@/src/components/room/RoomCard";
+import HotelInfo from "@/src/components/hotel/HotelInfo";
+import RoomCard from "@/src/components/room/RoomCard";
 import Button from "@/src/components/common/Button";
+import {
+  MOCK_FACILITIES,
+  MOCK_HOTEL_INFO,
+  MOCK_IMAGES,
+  MOCK_ROOMS,
+} from '@/src/lib/mockHotelDetail';
 
 export default function ViewRoomPage() {
   return (

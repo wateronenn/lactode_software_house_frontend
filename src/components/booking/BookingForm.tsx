@@ -93,7 +93,7 @@ export default function BookingForm({ bookingId, defaultHotelId }: Props) {
     setMessage(result.message);
 
     if (result.ok) {
-      router.push(user?.role === 'admin' ? '/admin/bookings' : '/my-booking');
+      router.push(user?.role === 'admin' ? '/admin/bookings' : '/user/bookings');
     }
   };
 
