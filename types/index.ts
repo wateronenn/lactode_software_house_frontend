@@ -11,15 +11,26 @@ export type User = {
 export type Hotel = {
   _id: string;
   name: string;
-  address: string;
+  description: string;
+  location: string;
   district: string;
   province: string;
   postalcode: string;
   region: string;
   tel: string;
-  image?: string;
-  description?: string;
-  facilities?: string[];
+  email: string;
+  pictures: string[];
+  facilities: string[];
+  status: string;
+};
+
+export type Booking = {
+  _id: string;
+  user: string | User;
+  hotel: string | Hotel;
+  checkInDate: string;
+  checkOutDate: string;
+  createdAt?: string;
 };
 
 export type Room = {
@@ -37,15 +48,6 @@ export type Room = {
   avaliableNumber: number;
   availableNumber?: number;
   status: string;
-};
-
-export type Booking = {
-  _id: string;
-  user: string | User;
-  hotel: string | Hotel;
-  checkInDate: string;
-  checkOutDate: string;
-  createdAt?: string;
 };
 
 export type RegisterInput = {

@@ -69,16 +69,6 @@ export async function logoutUser(token: string): Promise<void> {
   await request<{ success: boolean; data: Record<string, never> }>('/auth/logout', { method: 'GET' }, token);
 }
 
-export async function getHotels(): Promise<Hotel[]> {
-  const response = await request<{ success: boolean; data: Hotel[] }>('/hotels', { method: 'GET' });
-  return response.data;
-}
-
-export async function getHotelById(id: string): Promise<Hotel> {
-  const response = await request<{ success: boolean; data: Hotel }>(`/hotels/${id}`, { method: 'GET' });
-  return response.data;
-}
-
 export async function createRoom(input: RoomInput, token: string): Promise<Room> {
   const response = await request<{ success: boolean; data: Room }>(
     `/hotels/${input.hotelId}/rooms`,
