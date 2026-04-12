@@ -12,6 +12,9 @@ export default function ExamplePage() {
   return (
     <div className="flex flex-col gap-8 p-10">
       <Button>Button</Button>
+      <Button className='btn-sm'>Button-sm</Button>
+      <Button className='btn-md'>Button-md</Button>
+      <Button className='btn-lg'>Button-lg</Button>
 
       <Button variant="primary-icon" icon={<LogIn size={40} strokeWidth={2} />}>
         Button
