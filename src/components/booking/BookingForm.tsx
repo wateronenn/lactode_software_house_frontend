@@ -11,6 +11,7 @@ const FALLBACK_IMAGE =
 type Props = {
   bookingId?: string;
   defaultHotelId?: string;
+  defaultRoomId?: string;
 };
 
 function formatDateInput(value?: string) {
@@ -25,7 +26,7 @@ function dateDiff(checkInDate: string, checkOutDate: string) {
   return Math.max(0, Math.round((end - start) / (1000 * 60 * 60 * 24)));
 }
 
-export default function BookingForm({ bookingId, defaultHotelId }: Props) {
+export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }: Props) {
   const router = useRouter();
   const { hotels, createBooking, fetchBookingById, loading, updateBooking, user } = useApp();
   const fullName = `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim() || user?.username || '';
@@ -34,6 +35,7 @@ export default function BookingForm({ bookingId, defaultHotelId }: Props) {
   const [message, setMessage] = useState('');
   const [hydrating, setHydrating] = useState(Boolean(bookingId));
   const [hotelId, setHotelId] = useState(defaultHotelId ?? '');
+  const [roomId, setRoomId] = useState(defaultRoomId ?? '');
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
 
@@ -51,7 +53,12 @@ export default function BookingForm({ bookingId, defaultHotelId }: Props) {
       setHydrating(false);
 
       if (booking) {
-        setHotelId(typeof booking.hotel === 'string' ? booking.hotel : booking.hotel._id);
+        const bookingHotel = booking.hotelID ?? booking.hotel;
+        setHotelId(typeof bookingHotel === 'string' ? bookingHotel : bookingHotel._id);
+        const bookingRoom = booking.roomID ?? booking.room;
+        if (bookingRoom) {
+          setRoomId(typeof bookingRoom === 'string' ? bookingRoom : bookingRoom._id);
+        }
         setCheckInDate(formatDateInput(booking.checkInDate));
         setCheckOutDate(formatDateInput(booking.checkOutDate));
       }
@@ -69,7 +76,10 @@ export default function BookingForm({ bookingId, defaultHotelId }: Props) {
     if (defaultHotelId) {
       setHotelId(defaultHotelId);
     }
-  }, [bookingId, defaultHotelId]);
+    if (defaultRoomId) {
+      setRoomId(defaultRoomId);
+    }
+  }, [bookingId, defaultHotelId, defaultRoomId]);
 
   const selectedHotel = useMemo(
     () => hotels.find((hotel) => hotel._id === hotelId),
@@ -86,7 +96,7 @@ export default function BookingForm({ bookingId, defaultHotelId }: Props) {
       return;
     }
 
-    const payload = { hotelId, checkInDate, checkOutDate };
+    const payload = { hotelId, roomId: roomId || undefined, checkInDate, checkOutDate };
     const result = bookingId
       ? await updateBooking(bookingId, payload)
       : await createBooking(payload);

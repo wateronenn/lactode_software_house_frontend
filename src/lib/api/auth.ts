@@ -118,7 +118,6 @@ export async function logoutUser(token: string): Promise<void> {
 }
 
 export async function updateUser(
-  id: string,
   data: Partial<{ firstname: string; lastname: string; username: string; email: string; tel: string }>,
   token: string
 ): Promise<User> {
@@ -134,7 +133,7 @@ export async function updateUser(
   };
 
   const response = await request<{ success: boolean; data: User }>(
-    `/auth/${id}`,
+    '/auth/updateUser',
     {
       method: 'PUT',
       body: JSON.stringify(payload),
@@ -146,12 +145,11 @@ export async function updateUser(
 }
 
 export async function updatePassword(
-  userId: string,
-  payload: { currentPassword?: string; newPassword: string },
+  payload: { currentPassword: string; newPassword: string; rePassword: string },
   token: string
 ): Promise<{ success: boolean; msg: string }> {
-  return request(`/auth/${userId}/password`, {
-    method: 'PUT',
+  return request('/auth/resetPassword', {
+    method: 'POST',
     body: JSON.stringify(payload),
   }, token);
 }

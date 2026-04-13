@@ -39,10 +39,9 @@ type AppContextValue = {
   createBooking: (input: BookingInput) => Promise<ActionResult>;
   updateBooking: (bookingId: string, input: BookingInput) => Promise<ActionResult>;
   deleteBooking: (bookingId: string) => Promise<ActionResult>;
-  updateUser: (id: string, data: Partial<Pick<User, 'firstname' | 'lastname' | 'username' | 'email' | 'tel'>>) => Promise<ActionResult>;
+  updateUser: (data: Partial<Pick<User, 'firstname' | 'lastname' | 'username' | 'email' | 'tel'>>) => Promise<ActionResult>;
   updatePassword: (
-    id: string,
-    data: { currentPassword?: string; newPassword: string }
+    data: { currentPassword: string; newPassword: string; rePassword: string }
   ) => Promise<ActionResult>;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
@@ -135,7 +134,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const updateUser = useCallback(
     async (
-      id: string,
       data: Partial<Pick<User, 'firstname' | 'lastname' | 'username' | 'email' | 'tel'>>
     ): Promise<ActionResult> => {
       if (!token) {
@@ -143,7 +141,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        const updatedUser = await updateUserRequest(id, data, token);
+        const updatedUser = await updateUserRequest(data, token);
         setUser(updatedUser);
         return { ok: true, message: 'Profile updated successfully.' };
       } catch (error) {
@@ -155,15 +153,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const updatePassword = useCallback(
     async (
-      id: string,
-      data: { currentPassword?: string; newPassword: string }
+      data: { currentPassword: string; newPassword: string; rePassword: string }
     ): Promise<ActionResult> => {
       if (!token) {
         return { ok: false, message: 'Please sign in first.' };
       }
 
       try {
-        const response = await updatePasswordRequest(id, data, token);
+        const response = await updatePasswordRequest(data, token);
         return {
           ok: true,
           message: response?.msg || 'Password updated successfully.',

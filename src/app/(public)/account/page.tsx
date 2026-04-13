@@ -24,6 +24,7 @@ export default function AccountPage() {
   const [mode, setMode] = useState<Mode>('view');
 
   const [profileForm, setProfileForm] = useState<ProfileFormState>({
+    username: '',
     firstname: '',
     lastname: '',
     email: '',
@@ -48,6 +49,7 @@ export default function AccountPage() {
     if (!user) return;
 
     setProfileForm({
+      username: user.username || '',
       firstname: user.firstname || '',
       lastname: user.lastname || '',
       email: user.email || '',
@@ -116,11 +118,92 @@ export default function AccountPage() {
     setPasswordError('');
 
     setProfileForm({
+      username: user.username || '',
       firstname: user.firstname || '',
       lastname: user.lastname || '',
       email: user.email || '',
       tel: user.tel || '',
     });
+  };
+
+  const handleProfileSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!user) return;
+
+    setProfileError('');
+    setProfileMessage('');
+
+    const username = profileForm.username.trim();
+    const firstname = profileForm.firstname.trim();
+    const lastname = profileForm.lastname.trim();
+    const email = profileForm.email.trim().toLowerCase();
+    const tel = profileForm.tel.trim();
+
+    if (!username || !firstname || !lastname || !email || !tel) {
+      setProfileError('Please fill in all fields.');
+      return;
+    }
+
+    setProfileLoading(true);
+    const result = await updateUser({
+      username,
+      firstname,
+      lastname,
+      email,
+      tel,
+    });
+    setProfileLoading(false);
+
+    if (!result.ok) {
+      setProfileError(result.message);
+      return;
+    }
+
+    setProfileMessage(result.message);
+    setMode('view');
+  };
+
+  const handlePasswordSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!user) return;
+
+    setPasswordError('');
+    setPasswordMessage('');
+
+    const currentPassword = passwordForm.currentPassword.trim();
+    const newPassword = passwordForm.newPassword.trim();
+    const rePassword = passwordForm.confirmPassword.trim();
+
+    if (!currentPassword || !newPassword || !rePassword) {
+      setPasswordError('Please fill in all fields.');
+      return;
+    }
+
+    if (newPassword !== rePassword) {
+      setPasswordError('New password confirmation mismatch.');
+      return;
+    }
+
+    setPasswordLoading(true);
+    const result = await updatePassword({
+      currentPassword,
+      newPassword,
+      rePassword,
+    });
+    setPasswordLoading(false);
+
+    if (!result.ok) {
+      setPasswordError(result.message);
+      return;
+    }
+
+    setPasswordMessage(result.message);
+    setPasswordForm({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    });
+    setMode('view');
   };
 
   const openChangePasswordMode = () => {
@@ -185,6 +268,7 @@ export default function AccountPage() {
             {mode === 'view' && (
               <AccountInfoCard
                 fullName={fullName}
+                username={user.username || ''}
                 email={user.email}
                 tel={user.tel}
                 onLogout={logoutUser}
@@ -200,7 +284,7 @@ export default function AccountPage() {
                 loading={profileLoading}
                 onChange={setProfileForm}
                 onCancel={openViewMode}
-                onSubmit={() => {}}
+                onSubmit={handleProfileSubmit}
               />
             )}
 
@@ -211,7 +295,7 @@ export default function AccountPage() {
                 loading={passwordLoading}
                 onChange={setPasswordForm}
                 onCancel={openViewMode}
-                onSubmit={() => {}}
+                onSubmit={handlePasswordSubmit}
               />
             )}
 

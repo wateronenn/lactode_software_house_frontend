@@ -4,10 +4,13 @@ export type User = {
   _id: string;
   firstname: string;
   lastname: string;
-  username?: string;
+  username: string;
   email: string;
   tel: string;
   role: Role;
+  picture?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type Hotel = {
@@ -15,28 +18,43 @@ export type Hotel = {
   name: string;
   description: string;
   location: string;
+  address?: string;
   district: string;
   province: string;
   postalcode: string;
   region: string;
+  ownerID?: string | User;
   tel: string;
   email: string;
   pictures: string[];
+  image?: string | null;
+  rooms?: Array<string | Room>;
+  roomTypes?: string[];
   facilities: string[];
   status: string;
+  favoriteBy?: number;
+  bookedTimes?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type Booking = {
   _id: string;
+  bookingID?: string;
   user: string | User;
+  hotelID: string | Hotel;
+  roomID?: string | Room;
   hotel: string | Hotel;
+  room?: string | Room;
   checkInDate: string;
   checkOutDate: string;
   createdAt?: string;
+  updatedAt?: string;
 };
 
 export type Room = {
   _id: string;
+  hotelID: string | Hotel;
   hotel?: string | Hotel;
   picture: string[];
   image?: string | null;
@@ -47,9 +65,11 @@ export type Room = {
   bed: number;
   description: string;
   facilities: string[];
-  avaliableNumber: number;
-  availableNumber?: number;
+  availableNumber: number;
+  avaliableNumber?: number;
   status: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type RegisterInput = {
@@ -68,6 +88,7 @@ export type LoginInput = {
 
 export type BookingInput = {
   hotelId: string;
+  roomId?: string;
   checkInDate: string;
   checkOutDate: string;
 };
@@ -82,7 +103,8 @@ export type RoomInput = {
   bed: number;
   description: string;
   facilities: string[];
-  avaliableNumber: number;
+  availableNumber: number;
+  avaliableNumber?: number;
   status: string;
 };
 

@@ -105,7 +105,7 @@ export default function RoomCreateForm({ hotelId }: Props) {
       hotelId,
       picture: form.picture,
       roomType: form.roomType.trim(),
-      avaliableNumber: Number(form.avaliableNumber),
+      availableNumber: Number(form.avaliableNumber),
       price: Number(form.price),
       people: Number(form.people),
       bedType: form.bedType.trim(),
