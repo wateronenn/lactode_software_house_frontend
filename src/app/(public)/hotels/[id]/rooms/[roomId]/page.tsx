@@ -4,9 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import FacilityList from '@/src/components/common/FacilityList';
 import { useApp } from '@/src/context/AppContext';
-import { formatApiMessage } from '@/src/lib/api';
+import { formatApiMessage, getHotelById } from '@/src/lib/api';
 import { Hotel } from '@/types';
-import { getHotelById } from '@/src/lib/hotels';
 
 // Facility tags — extend when your Hotel type gets a facilities field
 const HOTEL_FALLBACK_FACILITIES = [
