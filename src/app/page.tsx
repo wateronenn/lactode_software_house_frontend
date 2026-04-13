@@ -6,7 +6,7 @@ import { useApp } from '@/src/context/AppContext';
 
 export default function ExamplePage() {
   const makeUser = (name: string, role: 'user' | 'hotel owner' | 'admin') => ({
-    _id: `${role}-${name.toLowerCase()}`,
+    _id: role === 'hotel owner' ? '69da0c7ff8190a65bcf5db14' : `${role}-${name.toLowerCase()}`,
     name,
     email: `${name.toLowerCase()}@example.com`,
     tel: '012-345-6789',

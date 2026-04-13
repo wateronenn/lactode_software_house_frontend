@@ -2,7 +2,7 @@
 import { MOCK_ROOMS } from "@/src/lib/mockHotelDetail";
 import RoomCard from "./RoomCard";
 
-export default async function RoomCardList() {
+export default function RoomCardList() {
     return (
         <div className="space-y-4">
             {MOCK_ROOMS.map((room) => (

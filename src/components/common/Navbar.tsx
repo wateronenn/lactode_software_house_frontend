@@ -85,7 +85,7 @@ export default function Navbar() {
 
           {role === 'hotel owner' && (
             <>
-              <Link href="/owner/hotels/123" className="navbar-menu-item">
+              <Link href="/owner/hotels" className="navbar-menu-item">
                 <BedDouble className="navbar-menu-icon" />
                 <span>Hotel Management</span>
               </Link>

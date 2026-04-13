@@ -3,6 +3,7 @@ import Button from '@/src/components/common/Button';
 import FacilityList from '@/src/components/common/FacilityList';
 import PhotoGrid from '@/src/components/common/PhotoGrid';
 import HotelInfo from '@/src/components/hotel/HotelInfo';
+import RoomCardList from '@/src/components/room/RoomCardList';
 import { getHotelById } from '@/src/lib/api';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80';
@@ -43,6 +44,11 @@ export default async function HotelDetailPage({
           <section className="space-y-3">
             <h2 className="text-subtitle">Availability</h2>
             <AvailabilitySearch />
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-subtitle">Rooms</h2>
+            <RoomCardList />
           </section>
         </div>
       </main>
