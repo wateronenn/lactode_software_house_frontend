@@ -1,5 +1,5 @@
 import { Booking, BookingInput } from '@/types';
-import { request } from './client';
+import { ApiError, request } from './client';
 
 function normalizeBooking(booking: Booking): Booking {
   const source = booking as unknown as Record<string, unknown>;
@@ -27,13 +27,14 @@ export async function getBookingById(id: string, token: string): Promise<Booking
 
 export async function createBooking(input: BookingInput, token: string): Promise<Booking> {
   const payload = {
+    hotelID: input.hotelId,
     checkInDate: input.checkInDate,
     checkOutDate: input.checkOutDate,
     ...(input.roomId ? { roomID: input.roomId } : {}),
   };
 
   const response = await request<{ success: boolean; data: Booking }>(
-    `/hotels/${input.hotelId}/bookings`,
+    '/bookings',
     {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -45,21 +46,47 @@ export async function createBooking(input: BookingInput, token: string): Promise
 
 export async function updateBooking(id: string, input: BookingInput, token: string): Promise<Booking> {
   const payload = {
-    hotelID: input.hotelId,
     checkInDate: input.checkInDate,
     checkOutDate: input.checkOutDate,
-    ...(input.roomId ? { roomID: input.roomId } : {}),
   };
 
-  const response = await request<{ success: boolean; data: Booking }>(
-    `/bookings/${id}`,
-    {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    },
-    token
-  );
-  return normalizeBooking(response.data);
+  try {
+    const response = await request<{ success: boolean; data: Booking }>(
+      `/bookings/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+      },
+      token
+    );
+    return normalizeBooking(response.data);
+  } catch (error) {
+    const shouldRetry =
+      error instanceof ApiError &&
+      error.status >= 500 &&
+      (Boolean(input.hotelId) || Boolean(input.roomId));
+
+    if (!shouldRetry) {
+      throw error;
+    }
+
+    const legacyPayload = {
+      hotelID: input.hotelId,
+      checkInDate: input.checkInDate,
+      checkOutDate: input.checkOutDate,
+      ...(input.roomId ? { roomID: input.roomId } : {}),
+    };
+
+    const fallbackResponse = await request<{ success: boolean; data: Booking }>(
+      `/bookings/${id}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(legacyPayload),
+      },
+      token
+    );
+    return normalizeBooking(fallbackResponse.data);
+  }
 }
 
 export async function deleteBooking(id: string, token: string): Promise<void> {

@@ -1,4 +1,5 @@
 import { Hotel } from '@/types';
+import { normalizeFacilitiesForApi, normalizeFacilitiesForDisplay } from '@/src/constants/facilities';
 import { request } from './client';
 
 function normalizeHotel(hotel: Hotel): Hotel {
@@ -17,6 +18,12 @@ function normalizeHotel(hotel: Hotel): Hotel {
     typeof source.image === 'string' && source.image.trim().length > 0
       ? source.image.trim()
       : pictures[0] ?? null;
+  const facilities = Array.isArray(source.facilities)
+    ? normalizeFacilitiesForDisplay(
+        source.facilities.filter((item): item is string => typeof item === 'string'),
+        'hotel'
+      )
+    : [];
 
   return {
     ...hotel,
@@ -24,6 +31,7 @@ function normalizeHotel(hotel: Hotel): Hotel {
     address: typeof source.address === 'string' && source.address.trim().length > 0 ? source.address.trim() : location,
     pictures,
     image,
+    facilities,
     ownerID: (source.ownerID ?? source.ownerId ?? source.OwnerID) as Hotel['ownerID'],
   };
 }
@@ -62,11 +70,18 @@ type UpdateHotelInput = Partial<{
 }>;
 
 export async function updateHotel(id: string, input: UpdateHotelInput, token: string): Promise<Hotel> {
+  const payload = {
+    ...input,
+    ...(Array.isArray(input.facilities)
+      ? { facilities: normalizeFacilitiesForApi(input.facilities, 'hotel') }
+      : {}),
+  };
+
   const response = await request<{ success: boolean; data: Hotel }>(
     `/hotels/${id}`,
     {
       method: 'PUT',
-      body: JSON.stringify(input),
+      body: JSON.stringify(payload),
     },
     token
   );

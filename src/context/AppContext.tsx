@@ -18,9 +18,10 @@ import {
   updateUser as updateUserRequest,
   updatePassword as updatePasswordRequest,
 } from '@/src/lib/api';
+import { getRoleLandingPath } from '@/src/lib/rolePath';
 import { Booking, BookingInput, Hotel, LoginInput, RegisterInput, User } from '@/types';
 
-type ActionResult = { ok: boolean; message: string };
+type ActionResult = { ok: boolean; message: string; redirectTo?: string };
 
 type AppContextValue = {
   apiBaseUrl: string;
@@ -67,8 +68,8 @@ function toMidnightDate(value: string) {
   return new Date(`${value}T00:00:00`);
 }
 
-function validateBookingInput(input: BookingInput) {
-  if (!input.hotelId) {
+function validateBookingInput(input: BookingInput, requireHotel = true) {
+  if (requireHotel && !input.hotelId) {
     return 'Please select a hotel';
   }
 
@@ -275,7 +276,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setUser(profile);
       setBookings(bookingData);
 
-      return { ok: true, message: 'Login successful.' };
+      return { ok: true, message: 'Login successful.', redirectTo: getRoleLandingPath(profile.role) };
     } catch (error) {
       return { ok: false, message: formatApiMessage(error, 'Cannot sign in right now.') };
     }
@@ -324,7 +325,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return { ok: false, message: 'Please sign in first.' };
       }
 
-      const validationMessage = validateBookingInput(input);
+      const validationMessage = validateBookingInput(input, false);
       if (validationMessage) {
         return { ok: false, message: validationMessage };
       }

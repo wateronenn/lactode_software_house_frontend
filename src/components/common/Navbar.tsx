@@ -12,32 +12,23 @@ import {
   User as UserIcon,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { getRoleLandingPath, normalizeRoleForPath } from '@/src/lib/rolePath';
 
 type NavRole = 'guest' | 'user' | 'hotelOwner' | 'admin';
-
-function normalizeNavRole(rawRole: unknown): NavRole {
-  if (typeof rawRole !== 'string') return 'guest';
-  const value = rawRole.trim().toLowerCase();
-  if (value === 'admin') return 'admin';
-  if (value === 'user') return 'user';
-  if (['hotel owner', 'owner', 'hotelowner', 'hotel_owner', 'hotel-owner'].includes(value)) {
-    return 'hotelOwner';
-  }
-  return 'guest';
-}
 
 export default function Navbar() {
   const router = useRouter();
   const { user, logoutUser } = useApp();
 
-  const role = normalizeNavRole(user?.role);
+  const role = normalizeRoleForPath(user?.role) as NavRole;
+  const homePath = getRoleLandingPath(user?.role);
   const fullName = `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim();
   const displayName = user?.username || fullName || 'Account';
 
   return (
     <header className="navbar">
       <div className="navbar-container">
-        <Link href="/" className="navbar-logo">
+        <Link href={homePath} className="navbar-logo">
           <div className="navbar-logo-icon">
             <Building2 className="navbar-logo-building" />
           </div>

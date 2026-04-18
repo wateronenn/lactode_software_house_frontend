@@ -6,4 +6,4 @@ export { getHotels, getHotelsByOwnerId, getHotelById, updateHotel } from './api/
 
 export { getBookings, getBookingById, createBooking, updateBooking, deleteBooking } from './api/bookings';
 
-export { createRoom, getRoomById } from './api/rooms';
+export { createRoom, updateRoom, getRoomById, getRoomsByHotelId, deleteRoom } from './api/rooms';
