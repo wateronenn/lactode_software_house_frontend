@@ -1,70 +1,61 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Button from "@/src/components/common/Button";
-import { TriangleAlert } from "lucide-react";
+import { useState } from 'react';
+import { TriangleAlert } from 'lucide-react';
+import Button from '@/src/components/common/Button';
 
 interface DeletePopupProps {
-  hotelId: string;
-  onDelete?: () => void;
+  itemId: string;
+  itemLabel?: string;
+  triggerClassName?: string;
+  onDelete?: (itemId: string) => void | Promise<void>;
 }
 
-export default function DeletePopup({ hotelId, onDelete }: DeletePopupProps) {
+export default function DeletePopup({
+  itemId,
+  itemLabel = 'item',
+  triggerClassName = 'btn-md',
+  onDelete,
+}: DeletePopupProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleDelete = () => {
-    // TODO: connect to delete API
-    console.log("delete hotel", hotelId);
-    onDelete?.();
+  const handleDelete = async () => {
+    await onDelete?.(itemId);
     setIsOpen(false);
   };
 
   return (
     <>
-      {/* Delete trigger button */}
-      <Button variant="danger" className="btn-md" onClick={() => setIsOpen(true)}>
-        delete
+      <Button variant="danger" className={triggerClassName} onClick={() => setIsOpen(true)}>
+        Delete
       </Button>
 
-      {/* Modal overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsOpen(false)} />
 
-          {/* Modal */}
-          <div className="relative bg-white rounded-3xl p-8 max-w-xl w-full mx-4 shadow-xl">
+          <div className="relative mx-4 w-full max-w-xl rounded-3xl bg-white p-8 shadow-xl">
             <div className="flex flex-row items-center justify-center gap-8">
-              
-              {/* Warning icon */}
-              <TriangleAlert className="w-16 h-16 text-red-500 flex-shrink-0" />
+              <TriangleAlert className="h-16 w-16 flex-shrink-0 text-red-500" />
 
-              {/* Message */}
               <div>
-                <p className="text-lg font-bold text-gray-900 leading-snug">
-                  Are you sure you want to delete this hotel?
+                <p className="text-lg font-bold leading-snug text-gray-900">
+                  Are you sure you want to delete this {itemLabel}?
                   <br />
                   This action cannot be undone.
                 </p>
               </div>
-
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center justify-between mt-8">
+            <div className="mt-8 flex items-center justify-between">
               <Button variant="disabled" className="btn-md" onClick={() => setIsOpen(false)}>
-                cancel
+                Cancel
               </Button>
               <Button variant="danger" className="btn-md" onClick={handleDelete}>
-                delete
+                Delete
               </Button>
             </div>
           </div>
-
         </div>
       )}
     </>
