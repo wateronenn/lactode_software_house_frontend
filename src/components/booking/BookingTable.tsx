@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
+import Button from '@/src/components/common/Button';
+import DeletePopup from '@/src/components/common/DeletePopup';
 import { useApp } from '@/src/context/AppContext';
 import { Booking, Hotel, User } from '@/types';
 
@@ -89,21 +90,22 @@ export default function BookingTable({
                 </div>
                 <div className="text-sm font-medium text-slate-700">{nights}</div>
                 <div className="flex flex-wrap gap-2">
-                  <Link
+                  <DeletePopup
+                    itemId={booking._id}
+                    itemLabel="booking"
+                    triggerClassName="rounded-xl border border-rose-300 px-3 py-2 text-sm font-medium text-rose-600 transition hover:bg-rose-50"
+                    onDelete={async (bookingId) => {
+                      const result = await deleteBooking(bookingId);
+                      setMessage(result.message);
+                    }}
+                  />
+                  <Button
+                    variant="primary"
                     href={`${editBasePath}/${booking._id}/edit`}
                     className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                   >
                     Edit
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      const result = await deleteBooking(booking._id);
-                      setMessage(result.message);
-                    }}
-                    className="rounded-xl border border-rose-300 px-3 py-2 text-sm font-medium text-rose-600 transition hover:bg-rose-50"
-                  >
-                    Delete
-                  </button>
+                  </Button>
                 </div>
               </div>
             );
