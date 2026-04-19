@@ -7,14 +7,14 @@ import Button from '@/src/components/common/Button';
 interface DeletePopupProps {
   itemId: string;
   itemLabel?: string;
-  triggerClassName?: string;
+  disabled?: boolean;
   onDelete?: (itemId: string) => void | Promise<void>;
 }
 
 export default function DeletePopup({
   itemId,
   itemLabel = 'item',
-  triggerClassName = 'btn-md',
+  disabled = false,
   onDelete,
 }: DeletePopupProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +26,12 @@ export default function DeletePopup({
 
   return (
     <>
-      <Button variant="danger" className={triggerClassName} onClick={() => setIsOpen(true)}>
+      <Button
+        variant="danger"
+        className="btn-danger"
+        onClick={() => setIsOpen(true)}
+        disabled={disabled}
+      >
         Delete
       </Button>
 

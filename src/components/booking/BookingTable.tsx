@@ -93,7 +93,6 @@ export default function BookingTable({
                   <DeletePopup
                     itemId={booking._id}
                     itemLabel="booking"
-                    triggerClassName="rounded-xl border border-rose-300 px-3 py-2 text-sm font-medium text-rose-600 transition hover:bg-rose-50"
                     onDelete={async (bookingId) => {
                       const result = await deleteBooking(bookingId);
                       setMessage(result.message);

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { BedDouble, Check, CircleDollarSign, UserRound } from 'lucide-react';
 import Button from '@/src/components/common/Button';
+import DeletePopup from '@/src/components/common/DeletePopup';
 import FacilityList from '@/src/components/common/FacilityList';
 import PhotoGrid from '@/src/components/common/PhotoGrid';
 import { useApp } from '@/src/context/AppContext';
@@ -99,9 +100,6 @@ export default function RoomDetailPage() {
       return;
     }
 
-    const shouldDelete = window.confirm('Are you sure you want to delete this room?');
-    if (!shouldDelete) return;
-
     try {
       setDeleting(true);
       setActionError(null);
@@ -186,9 +184,12 @@ export default function RoomDetailPage() {
         </div>
 
         {canManage ? (
-          <Button variant="danger" className="btn-md" onClick={handleDelete} disabled={deleting || !canDelete}>
-            {deleting ? 'Deleting...' : 'Delete'}
-          </Button>
+          <DeletePopup
+            itemId={roomId ?? ''}
+            itemLabel="room"
+            disabled={deleting || !canDelete}
+            onDelete={handleDelete}
+          />
         ) : null}
       </div>
 

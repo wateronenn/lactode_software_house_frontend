@@ -29,7 +29,7 @@ export default async function HotelDetailPage({
     return (
       <main className="min-h-screen px-16 py-8">
         <div className="flex items-center justify-between">
-          <Button variant="disabled" className="btn-md" href="/hotels">
+          <Button variant="disabled" className="btn-md" href="/owner/hotels">
             Back
           </Button>
           <Button variant="primary" className="btn-md" href={`/owner/hotels/${id}/edit`}>
