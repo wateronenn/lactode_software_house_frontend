@@ -14,6 +14,7 @@ export interface HotelFormData {
   description: string;
   phone: string;
   email: string;
+  ownerEmail: string;
   facilities: string[];
   image: string[];
 }
@@ -42,6 +43,7 @@ export default function HotelForm({
       description: initialData?.description ?? '',
       phone: initialData?.phone ?? '',
       email: initialData?.email ?? '',
+      ownerEmail: initialData?.ownerEmail ?? '',
       facilities: initialData?.facilities ?? [],
       image: initialData?.image
         ? Array.isArray(initialData.image)
@@ -265,6 +267,16 @@ export default function HotelForm({
               className="min-h-[180px] w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-[var(--color-text-primary)] outline-none placeholder:text-gray-400 focus:border-[var(--color-primary)]"
             />
           </div>
+
+          {mode === 'create' ? (
+            <TextInput
+              label="Owner Email"
+              type="email"
+              placeholder="owner@example.com"
+              value={form.ownerEmail}
+              onChange={(value) => setField('ownerEmail', value)}
+            />
+          ) : null}
         </section>
 
         <section>
