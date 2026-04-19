@@ -11,6 +11,7 @@ import Button from '@/src/components/common/Button';
 import { deleteHotel, formatApiMessage, getHotelById, getRoomsByHotelId } from '@/src/lib/api';
 import { useApp } from '@/src/context/AppContext';
 import { Hotel, Room } from '@/types';
+import DeletePopup from '@/src/components/common/DeletePopup';
 
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80';
@@ -88,9 +89,6 @@ export default function ViewHotelProfilePage() {
       return;
     }
 
-    const shouldDelete = window.confirm('Are you sure you want to delete this hotel?');
-    if (!shouldDelete) return;
-
     try {
       setDeleting(true);
       setActionError(null);
@@ -148,9 +146,12 @@ export default function ViewHotelProfilePage() {
           </Button>
         </div>
 
-        <Button variant="danger" className="btn-md" onClick={handleDelete} disabled={deleting}>
-          {deleting ? 'Deleting...' : 'Delete'}
-        </Button>
+        <DeletePopup
+          itemId={hotelId}
+          itemLabel="hotel"
+          disabled={deleting}
+          onDelete={handleDelete}
+        />
       </div>
 
       {actionError ? (
