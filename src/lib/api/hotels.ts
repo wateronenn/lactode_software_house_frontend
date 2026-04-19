@@ -65,6 +65,7 @@ type CreateHotelInput = {
   region?: string;
   tel: string;
   email: string;
+  ownerEmail: string;
   facilities?: string[];
   pictures?: string[];
   status?: string;

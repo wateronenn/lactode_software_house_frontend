@@ -41,6 +41,7 @@ export default function EditHotelPage() {
           description: hotel.description ?? '',
           phone: hotel.tel ?? '',
           email: hotel.email ?? '',
+          ownerEmail: '',
           facilities: hotel.facilities ?? [],
           image: hotel.pictures ?? [],
         });
