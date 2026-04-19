@@ -1,15 +1,11 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import BookingForm from '@/src/components/booking/BookingForm';
 import HotelCard from '@/src/components/hotel/HotelCard';
 import { useApp } from '@/src/context/AppContext';
 
-export default function BookingPageClient() {
-  const params = useSearchParams();
-  const defaultHotelId = params.get('hotelId') ?? undefined;
-  const { hotels, loading, ready, user } = useApp();
+export default function HotelPageClient() {
+  const { hotels } = useApp();
 
   const [page, setPage] = useState(1);
   const hotelsPerPage = 6;
@@ -24,7 +20,8 @@ export default function BookingPageClient() {
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">Hotel list</p>
         <h1 className="mt-2 text-4xl font-bold text-slate-900">Browse and book your next hotel</h1>
         <p className="mt-3 max-w-3xl text-slate-500">
-          Find the right hotel for your next trip. Explore available stays, check the details, and book your dates with ease.
+          Find the right hotel for your next trip. Explore available stays, check the details, and book your dates
+          with ease.
         </p>
       </section>
 
@@ -55,8 +52,6 @@ export default function BookingPageClient() {
           Next
         </button>
       </div>
-
-      
     </main>
   );
 }

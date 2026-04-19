@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
+import Button from '@/src/components/common/Button';
+import DeletePopup from '@/src/components/common/DeletePopup';
 import { useApp } from '@/src/context/AppContext';
 import { Booking, Hotel, User } from '@/types';
 
@@ -10,10 +11,18 @@ type Props = {
   title: string;
   emptyText: string;
   isAdmin?: boolean;
+  editBasePath?: string;
 };
 
 const getHotel = (hotel: Booking['hotel']) => (typeof hotel === 'string' ? null : (hotel as Hotel));
 const getUser = (user: Booking['user']) => (typeof user === 'string' ? null : (user as User));
+
+function getUserDisplayName(user: User | null) {
+  if (!user) return 'User';
+  const fullname = `${user.firstname ?? ''} ${user.lastname ?? ''}`.trim();
+  if (fullname) return fullname;
+  return user.username ?? 'User';
+}
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString();
@@ -25,7 +34,13 @@ function countNights(checkInDate: string, checkOutDate: string) {
   return Math.max(0, Math.round((end - start) / (1000 * 60 * 60 * 24)));
 }
 
-export default function BookingTable({ rows, title, emptyText, isAdmin = false }: Props) {
+export default function BookingTable({
+  rows,
+  title,
+  emptyText,
+  isAdmin = false,
+  editBasePath = '/user/bookings',
+}: Props) {
   const { deleteBooking } = useApp();
   const [message, setMessage] = useState('');
 
@@ -66,8 +81,8 @@ export default function BookingTable({ rows, title, emptyText, isAdmin = false }
               <div key={booking._id} className="grid gap-4 border-t border-slate-200 px-5 py-5 md:grid-cols-[1.5fr_1.2fr_0.8fr_1fr] md:items-center">
                 <div>
                   <p className="font-semibold text-slate-900">{hotel?.name ?? 'Hotel booking'}</p>
-                  <p className="mt-1 text-sm text-slate-500">{hotel ? `${hotel.province} · ${hotel.tel}` : 'Hotel details unavailable'}</p>
-                  {isAdmin ? <p className="mt-1 text-sm text-slate-500">{bookingUser?.name ?? 'User'} {bookingUser?.email ? `· ${bookingUser.email}` : ''}</p> : null}
+                  <p className="mt-1 text-sm text-slate-500">{hotel ? `${hotel.province} - ${hotel.tel}` : 'Hotel details unavailable'}</p>
+                  {isAdmin ? <p className="mt-1 text-sm text-slate-500">{getUserDisplayName(bookingUser)} {bookingUser?.email ? `- ${bookingUser.email}` : ''}</p> : null}
                 </div>
                 <div className="text-sm text-slate-600">
                   <p>{formatDate(booking.checkInDate)}</p>
@@ -75,21 +90,21 @@ export default function BookingTable({ rows, title, emptyText, isAdmin = false }
                 </div>
                 <div className="text-sm font-medium text-slate-700">{nights}</div>
                 <div className="flex flex-wrap gap-2">
-                  <Link
-                    href={`/edit-booking/${booking._id}`}
+                  <DeletePopup
+                    itemId={booking._id}
+                    itemLabel="booking"
+                    onDelete={async (bookingId) => {
+                      const result = await deleteBooking(bookingId);
+                      setMessage(result.message);
+                    }}
+                  />
+                  <Button
+                    variant="primary"
+                    href={`${editBasePath}/${booking._id}/edit`}
                     className="rounded-xl border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                   >
                     Edit
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      const result = await deleteBooking(booking._id);
-                      setMessage(result.message);
-                    }}
-                    className="rounded-xl border border-rose-300 px-3 py-2 text-sm font-medium text-rose-600 transition hover:bg-rose-50"
-                  >
-                    Delete
-                  </button>
+                  </Button>
                 </div>
               </div>
             );

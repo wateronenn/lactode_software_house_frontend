@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import AuthCard from '@/src/components/common/AuthCard';
 import { useApp } from '@/src/context/AppContext';
+import { getRoleLandingPath } from '@/src/lib/rolePath';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function LoginPage() {
             setMessage(result.message);
             setSubmitting(false);
             if (result.ok) {
-              router.push('/hotel');
+              router.push(result.redirectTo ?? getRoleLandingPath('guest'));
             }
           }}
         >
@@ -57,13 +58,20 @@ export default function LoginPage() {
             </p>
           ) : null}
 
-          <button disabled={submitting} className="w-full rounded-2xl bg-brand-500 px-5 py-3 text-base font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60">
+          <button
+            disabled={submitting}
+            style={{ backgroundColor: 'var(--color-primary)', color: '#ffffff' }}
+            className="w-full rounded-2xl bg-brand-500 px-5 py-3 text-base font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
+          >
             {submitting ? 'Signing in...' : 'Sign In'}
           </button>
 
           <p className="text-center text-sm text-slate-600">
             No account yet?{' '}
-            <Link href="/register" className="font-semibold text-brand-600 underline underline-offset-4">
+            <Link
+              href="/register"
+              className="rounded-sm font-semibold underline underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+            >
               Register
             </Link>
           </p>

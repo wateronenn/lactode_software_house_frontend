@@ -12,17 +12,23 @@ import {
   User as UserIcon,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { getRoleLandingPath, normalizeRoleForPath } from '@/src/lib/rolePath';
+
+type NavRole = 'guest' | 'user' | 'hotelOwner' | 'admin';
 
 export default function Navbar() {
   const router = useRouter();
   const { user, logoutUser } = useApp();
 
-  const role = user?.role ?? 'guest';
+  const role = normalizeRoleForPath(user?.role) as NavRole;
+  const homePath = '/';
+  const fullName = `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim();
+  const displayName = user?.username || fullName || 'Account';
 
   return (
     <header className="navbar">
       <div className="navbar-container">
-        <Link href="/" className="navbar-logo">
+        <Link href={homePath} className="navbar-logo">
           <div className="navbar-logo-icon">
             <Building2 className="navbar-logo-building" />
           </div>
@@ -36,14 +42,14 @@ export default function Navbar() {
         <nav className="navbar-menu">
           {role === 'guest' && (
             <>
-              <Link href="/hotel" className="navbar-menu-item">
+              <Link href="/hotels" className="navbar-menu-item">
                 <BedDouble className="navbar-menu-icon" />
                 <span>Hotel</span>
               </Link>
 
               <div className="navbar-divider" />
 
-              <Link href="/login" className="navbar-menu-item">
+              <Link href="/signin" className="navbar-menu-item">
                 <LogIn className="navbar-menu-icon" />
                 <span>Login</span>
               </Link>
@@ -52,21 +58,21 @@ export default function Navbar() {
 
           {role === 'user' && (
             <>
-              <Link href="/hotel" className="navbar-menu-item">
+              <Link href="/hotels" className="navbar-menu-item">
                 <BedDouble className="navbar-menu-icon" />
                 <span>Hotel</span>
               </Link>
 
-              <Link href="/my-booking" className="navbar-menu-item">
+              <Link href="/user/bookings" className="navbar-menu-item">
                 <BookUser className="navbar-menu-icon" />
                 <span>My Bookings</span>
               </Link>
 
               <div className="navbar-divider" />
 
-              <Link href="/profile" className="navbar-menu-item navbar-menu-item-account">
+              <Link href="/account" className="navbar-menu-item navbar-menu-item-account">
                 <UserIcon className="navbar-menu-icon navbar-menu-icon-account" />
-                <span>{user?.name ?? 'Jame'}</span>
+                <span>{displayName}</span>
               </Link>
 
               <button
@@ -83,9 +89,9 @@ export default function Navbar() {
             </>
           )}
 
-          {role === 'hotel owner' && (
+          {role === 'hotelOwner' && (
             <>
-              <Link href="/owner/hotel" className="navbar-menu-item">
+              <Link href="/owner/hotels" className="navbar-menu-item">
                 <BedDouble className="navbar-menu-icon" />
                 <span>Hotel Management</span>
               </Link>
@@ -97,9 +103,9 @@ export default function Navbar() {
 
               <div className="navbar-divider" />
 
-              <Link href="/profile" className="navbar-menu-item navbar-menu-item-account">
+              <Link href="/account" className="navbar-menu-item navbar-menu-item-account">
                 <UserIcon className="navbar-menu-icon navbar-menu-icon-account" />
-                <span>Hotel</span>
+                <span>{displayName}</span>
               </Link>
 
               <button
@@ -123,16 +129,16 @@ export default function Navbar() {
                 <span>Admin dashboard</span>
               </Link>
 
-              <Link href="/hotel" className="navbar-menu-item">
+              <Link href="/admin/hotels" className="navbar-menu-item">
                 <BedDouble className="navbar-menu-icon" />
                 <span>Hotel</span>
               </Link>
 
               <div className="navbar-divider" />
 
-              <Link href="/profile" className="navbar-menu-item navbar-menu-item-account">
+              <Link href="/account" className="navbar-menu-item navbar-menu-item-account">
                 <UserIcon className="navbar-menu-icon navbar-menu-icon-account" />
-                <span>Admin</span>
+                <span>{displayName}</span>
               </Link>
 
               <button
