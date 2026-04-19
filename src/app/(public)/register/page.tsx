@@ -23,6 +23,21 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+
+  function sanitizeMessage(message: string): string {
+    let errorMessage = message.toLowerCase();
+  if (errorMessage.includes('password')) {
+    return 'Password must be at least 6 characters.';
+  }
+  if (errorMessage.includes('email') && message.toLowerCase().includes('dup key')) {
+    return 'This email is already taken.';
+  }
+  // if (message.toLowerCase().includes('username')) {
+  //   return 'This username is already taken.';
+  // }
+  return message;
+}
 
   return (
     <main className="px-4 py-16 sm:px-6 lg:px-8">
@@ -33,7 +48,7 @@ export default function RegisterPage() {
             event.preventDefault();
             setSubmitting(true);
             const result = await registerUser({ firstname, lastname, username, email, tel, password });
-            setMessage(result.message);
+            setMessage(sanitizeMessage(result.message));
             setSubmitting(false);
             if (result.ok) {
               setTimeout(() => router.push('/signin'), 700);
@@ -65,6 +80,22 @@ export default function RegisterPage() {
             <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500" />
           </label>
 
+          {/* Terms & Privacy checkbox */}
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-slate-300 accent-[var(--color-primary)]"
+            />
+            <span className="text-sm text-slate-600">
+              I agree to the {' '}
+              <a href="/privacy" className="rounded-sm font-semibold underline underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40">
+              Privacy Policy
+              </a>
+            </span>
+          </label>
+
           {message ? (
             <p className={`rounded-2xl px-4 py-3 text-sm ${message.toLowerCase().includes('account created') ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
               {message}
@@ -72,7 +103,7 @@ export default function RegisterPage() {
           ) : null}
 
           <button
-            disabled={submitting}
+            disabled={submitting || !agreed}
             style={{ backgroundColor: 'var(--color-primary)', color: '#ffffff' }}
             className="w-full rounded-2xl bg-brand-500 px-5 py-3 text-base font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
           >

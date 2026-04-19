@@ -70,7 +70,7 @@ export default function LoginPage() {
             No account yet?{' '}
             <Link
               href="/register"
-              className="text-link rounded-sm font-semibold underline underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+              className="rounded-sm font-semibold underline underline-offset-4 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
             >
               Register
             </Link>
