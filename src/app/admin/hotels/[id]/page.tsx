@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import FacilityList from '@/src/components/common/FacilityList';
 import PhotoGrid from '@/src/components/common/PhotoGrid';
-import AvailabilitySearch from '@/src/components/common/AvailabilitySearch';
+import HotelAvailabilityRoomsSection from '@/src/components/hotel/HotelAvailabilityRoomsSection';
 import HotelInfo from '@/src/components/hotel/HotelInfo';
-import RoomCardList from '@/src/components/room/RoomCardList';
 import Button from '@/src/components/common/Button';
 import { deleteHotel, formatApiMessage, getHotelById, getRoomsByHotelId } from '@/src/lib/api';
 import { useApp } from '@/src/context/AppContext';
@@ -128,7 +127,8 @@ export default function ViewHotelProfilePage() {
     );
   }
 
-  const hotelEditHref = hotelId ? `/admin/hotels/${hotelId}/edit` : '/admin/hotels';
+  const resolvedHotelId = hotelId ?? hotel._id;
+  const hotelEditHref = `/admin/hotels/${resolvedHotelId}/edit`;
   const images = hotel.pictures?.length ? hotel.pictures : [FALLBACK_IMAGE];
   const facilities = hotel.facilities?.length
     ? hotel.facilities
@@ -147,7 +147,7 @@ export default function ViewHotelProfilePage() {
         </div>
 
         <DeletePopup
-          itemId={hotelId}
+          itemId={resolvedHotelId}
           itemLabel="hotel"
           disabled={deleting}
           onDelete={handleDelete}
@@ -170,20 +170,12 @@ export default function ViewHotelProfilePage() {
           <FacilityList facilities={facilities} />
         </section>
 
-        <section className="space-y-3">
-          <h2 className="text-subtitle">Availability</h2>
-          <AvailabilitySearch />
-        </section>
-
-        <section className="space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-subtitle">Rooms</h2>
-            <Button variant="primary" className="btn-sm" href={`/admin/hotels/${hotelId}/rooms/create`}>
-              Create Room
-            </Button>
-          </div>
-          <RoomCardList rooms={rooms} detailBasePath="/admin/hotels" />
-        </section>
+        <HotelAvailabilityRoomsSection
+          hotelId={resolvedHotelId}
+          initialRooms={rooms}
+          detailBasePath="/admin/hotels"
+          createRoomHref={`/admin/hotels/${resolvedHotelId}/rooms/create`}
+        />
       </div>
     </main>
   );
