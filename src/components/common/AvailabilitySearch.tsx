@@ -26,7 +26,8 @@ export default function AvailabilitySearch({ onSearch }: AvailabilitySearchProps
   const [guests, setGuests] = useState("");
 
   const handleSearch = () => {
-    onSearch?.({ checkIn, checkOut, guests: Number(guests) });
+    const parsedGuests = guests.trim() === '' ? 0 : Number.parseInt(guests, 10);
+    onSearch?.({ checkIn, checkOut, guests: Number.isNaN(parsedGuests) ? 0 : parsedGuests });
   };
 
   return (
@@ -61,6 +62,7 @@ export default function AvailabilitySearch({ onSearch }: AvailabilitySearchProps
           <input
             type="number"
             min={0}
+            step={1}
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
             className="w-16 text-sm text-gray-500 bg-transparent outline-none"

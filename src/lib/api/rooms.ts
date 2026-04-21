@@ -120,9 +120,38 @@ export async function getRoomById(hotelId: string, roomId: string): Promise<Room
   return normalizeRoom(response.data);
 }
 
-export async function getRoomsByHotelId(hotelId: string): Promise<Room[]> {
+type RoomAvailabilityQuery = {
+  checkInDate?: string;
+  checkOutDate?: string;
+  people?: number;
+};
+
+function buildRoomsByHotelPath(hotelId: string, query?: RoomAvailabilityQuery) {
+  const params = new URLSearchParams();
+
+  if (query?.checkInDate) {
+    params.set('checkInDate', query.checkInDate);
+  }
+
+  if (query?.checkOutDate) {
+    params.set('checkOutDate', query.checkOutDate);
+  }
+
+  const people = typeof query?.people === 'number' && Number.isFinite(query.people)
+    ? Math.trunc(query.people)
+    : undefined;
+
+  if (typeof people === 'number' && people > 0) {
+    params.set('people', String(people));
+  }
+
+  const queryString = params.toString();
+  return queryString ? `/hotels/${hotelId}/rooms?${queryString}` : `/hotels/${hotelId}/rooms`;
+}
+
+export async function getRoomsByHotelId(hotelId: string, query?: RoomAvailabilityQuery): Promise<Room[]> {
   const response = await request<{ success: boolean; data: Room[] }>(
-    `/hotels/${hotelId}/rooms`,
+    buildRoomsByHotelPath(hotelId, query),
     { method: 'GET' }
   );
   return response.data.map(normalizeRoom);
