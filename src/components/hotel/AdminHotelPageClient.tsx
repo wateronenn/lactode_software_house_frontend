@@ -9,7 +9,7 @@ import { normalizeFacilitiesForDisplay } from '@/src/constants/facilities';
 import { useApp } from '@/src/context/AppContext';
 
 export default function AdminHotelPageClient() {
-  const { hotels } = useApp();
+  const { hotels, loading, ready, user } = useApp();
 
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,6 +70,24 @@ export default function AdminHotelPageClient() {
     setSelectedFacilities([]);
     setPage(1);
   };
+
+  if (!ready || loading) {
+    return (
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-slate-500">Loading hotels...</div>
+      </main>
+    );
+  }
+
+  if (!user || user.role !== 'admin') {
+    return (
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-rose-700">
+          Admin access only.
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-7xl space-y-12 px-4 py-10 sm:px-6 lg:px-8">
