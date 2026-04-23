@@ -191,6 +191,7 @@ export default function HotelForm({
                 type="email"
                 placeholder="owner@gmail.com"
                 value={form.ownerEmail}
+                required
                 onChange={(value) => setField('ownerEmail', value)}
               />
             </div>
@@ -205,7 +206,7 @@ export default function HotelForm({
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr]">
             <TextInput
               label="Main picture"
-              placeholder="picture url"
+              placeholder="Picture url"
               value={mainPicture}
               onChange={setMainPicture}
             />
@@ -214,8 +215,8 @@ export default function HotelForm({
               <div className="flex items-end gap-2">
                 <div className="flex-1">
                   <TextInput
-                    label="Another picture"
-                    placeholder="picture url"
+                    label="More picture"
+                    placeholder="Picture url"
                     value={anotherPictures[0] ?? ''}
                     onChange={(value) => setAnotherPicture(0, value)}
                   />
@@ -264,6 +265,7 @@ export default function HotelForm({
             label="Hotel Name"
             placeholder="Resort Villa brabra"
             value={form.name}
+            required
             onChange={(value) => setField('name', value)}
           />
 
@@ -272,13 +274,15 @@ export default function HotelForm({
             type="email"
             placeholder="contact@sunsetparadise.com"
             value={form.email}
+            required
             onChange={(value) => setField('email', value)}
           />
 
           <TextInput
             label="Phone"
-            placeholder="+66 76 123 456"
+            placeholder="076123456"
             value={form.phone}
+            required
             onChange={(value) => setField('phone', value)}
           />
 
@@ -287,6 +291,7 @@ export default function HotelForm({
               label="Address"
               placeholder="Huai Kwang, Central, 342 Rama IV Road"
               value={form.address}
+              required
               onChange={(value) => setField('address', value)}
             />
           </div>
@@ -295,6 +300,7 @@ export default function HotelForm({
             label="District"
             placeholder="Huai Kwang"
             value={form.district}
+            required
             onChange={(value) => setField('district', value)}
           />
 
@@ -302,6 +308,7 @@ export default function HotelForm({
             label="Province"
             placeholder="Bangkok"
             value={form.province}
+            required
             onChange={(value) => setField('province', value)}
           />
 
@@ -309,11 +316,12 @@ export default function HotelForm({
             label="Postal Code"
             placeholder="12345"
             value={form.postalCode}
+            required
             onChange={(value) => setField('postalCode', value)}
           />
 
           <div className="md:col-span-3">
-            <label className="mb-2 block text-[14px] font-semibold text-[var(--color-text-primary)]">
+            <label className="mb-2 block text-subdetail">
               Description
             </label>
             <textarea
