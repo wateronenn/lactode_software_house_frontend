@@ -292,17 +292,17 @@ export default function HotelForm({
           </div>
 
           <TextInput
-            label="Province"
-            placeholder="Bangkok"
-            value={form.province}
-            onChange={(value) => setField('province', value)}
-          />
-
-          <TextInput
             label="District"
             placeholder="Huai Kwang"
             value={form.district}
             onChange={(value) => setField('district', value)}
+          />
+
+          <TextInput
+            label="Province"
+            placeholder="Bangkok"
+            value={form.province}
+            onChange={(value) => setField('province', value)}
           />
 
           <TextInput
