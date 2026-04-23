@@ -18,6 +18,7 @@ import {
   updateUser as updateUserRequest,
   updatePassword as updatePasswordRequest,
 } from '@/src/lib/api';
+import { clearAuthCookies, setAuthCookies } from '@/src/lib/authCookie';
 import { getRoleLandingPath } from '@/src/lib/rolePath';
 import { Booking, BookingInput, Hotel, LoginInput, RegisterInput, User } from '@/types';
 
@@ -191,11 +192,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const profile = await getMe(storedToken);
         setToken(storedToken);
         setUser(profile);
+        setAuthCookies(profile.role, true);
         const bookingData = await loadBookingsForToken(storedToken);
         setBookings(bookingData);
       } catch (error) {
         console.warn(formatApiMessage(error, 'Authentication session could not be restored.'));
         window.localStorage.removeItem(TOKEN_KEY);
+        clearAuthCookies();
         setToken(null);
         setUser(null);
         setBookings([]);
@@ -274,6 +277,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       window.localStorage.setItem(TOKEN_KEY, nextToken);
       setToken(nextToken);
       setUser(profile);
+      setAuthCookies(profile.role, true);
       setBookings(bookingData);
 
       return { ok: true, message: 'Login successful.', redirectTo: getRoleLandingPath(profile.role) };
@@ -291,6 +295,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       console.error(error);
     } finally {
       window.localStorage.removeItem(TOKEN_KEY);
+      clearAuthCookies();
       setToken(null);
       setUser(null);
       setBookings([]);
