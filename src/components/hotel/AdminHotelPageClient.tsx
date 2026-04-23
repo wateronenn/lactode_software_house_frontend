@@ -90,7 +90,7 @@ export default function AdminHotelPageClient() {
   }
 
   return (
-    <main className="mx-auto max-w-7xl space-y-12 px-4 py-10 sm:px-6 lg:px-8">
+    <main className="mx-auto max-w-7xl space-y-12 px-8 py-10 lg:px-16">
       <section>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-500">Admin hotels</p>
         <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -162,4 +162,3 @@ export default function AdminHotelPageClient() {
     </main>
   );
 }
-
