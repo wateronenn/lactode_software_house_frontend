@@ -92,8 +92,6 @@ export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }
       const booking = await fetchBookingById(bookingId);
       if (ignore) return;
 
-      console.log('booking.user:', booking?.user);
-
       setExisting(booking);
       setHydrating(false);
 
