@@ -63,7 +63,7 @@ function sleep(ms: number) {
 export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }: Props) {
   const router = useRouter();
   const { hotels, createBooking, fetchBookingById, loading, updateBooking, user } = useApp();
-  const fullName = `${user?.firstname ?? ''} ${user?.lastname ?? ''}`.trim() || user?.username || '';
+
 
   const [existing, setExisting] = useState<Booking | null>(null);
   const [message, setMessage] = useState('');
@@ -75,6 +75,13 @@ export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [roomDetails, setRoomDetails] = useState<Room | null>(null);
 
+  const bookingUser = existing
+    ? (typeof existing.user === 'object' ? existing.user : null)
+    : null;
+
+  const displayUser = bookingUser ?? user;
+  const fullName = `${displayUser?.firstname ?? ''} ${displayUser?.lastname ?? ''}`.trim() || displayUser?.username || '';
+
   useEffect(() => {
     if (!bookingId) return;
 
@@ -84,6 +91,8 @@ export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }
       setHydrating(true);
       const booking = await fetchBookingById(bookingId);
       if (ignore) return;
+
+      console.log('booking.user:', booking?.user);
 
       setExisting(booking);
       setHydrating(false);
@@ -277,7 +286,7 @@ export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }
     <span className="text-sm font-medium text-slate-700">Contact</span>
     <input
       type="text"
-      value={user?.tel || ''}
+      value={displayUser?.tel || ''}
       readOnly
       className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-slate-700 outline-none"
     />
@@ -288,7 +297,7 @@ export default function BookingForm({ bookingId, defaultHotelId, defaultRoomId }
     <span className="text-sm font-medium text-slate-700">Email</span>
     <input
       type="text"
-      value={user?.email || ''}
+      value={displayUser?.email || ''}
       readOnly
       className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-slate-700 outline-none"
     />
