@@ -32,7 +32,7 @@ export default function FavoriteRankingCard({
       onClick={onClick}
       className="group relative mb-8 flex min-h-[142px] cursor-pointer overflow-visible rounded-[30px] bg-white shadow-[0_14px_34px_rgba(15,23,42,0.14)] ring-1 ring-slate-100 transition duration-200 hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(15,23,42,0.18)]"
     >
-      {rank  ? (
+
         <div
           className="absolute -left-5 top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-sm font-extrabold text-[#4758eb] shadow-[0_8px_18px_rgba(15,23,42,0.22)] ring-4 ring-white"
           style={{
@@ -43,7 +43,7 @@ export default function FavoriteRankingCard({
         >
           #{rank}
         </div>
-      ) : null}
+ 
 
       <div className="relative z-0 h-[142px] w-[500px] shrink-0 overflow-hidden rounded-l-[30px] bg-white">
         <ProgressiveImage src={imageSrc} alt={hotel.name} />
