@@ -77,6 +77,7 @@ export default function HotelForm({
 
   const mainPicture = form.pictures[0] ?? '';
   const anotherPictures = form.pictures.slice(1);
+  const canAddAnotherPicture = anotherPictures.length < 19;
 
   const previewImages = form.pictures.filter((img) => img.trim() !== '');
 
@@ -105,6 +106,8 @@ export default function HotelForm({
   };
 
   const addAnotherPicture = () => {
+    if (!canAddAnotherPicture) return;
+
     setForm((prev) => ({
       ...prev,
       pictures: [...prev.pictures, ''],
@@ -202,59 +205,89 @@ export default function HotelForm({
         <section>
           <PhotoGrid images={previewImages} />
 
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr]">
-            <TextInput
-              label="Main picture"
-              placeholder="picture url"
-              value={mainPicture}
-              onChange={setMainPicture}
-            />
-
-            <div className="space-y-3">
-              <div className="flex items-end gap-2">
-                <div className="flex-1">
-                  <TextInput
-                    label="Another picture"
-                    placeholder="picture url"
-                    value={anotherPictures[0] ?? ''}
-                    onChange={(value) => setAnotherPicture(0, value)}
-                  />
+          <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="rounded-[22px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-subdetail font-semibold text-[var(--color-text-primary)]">
+                    Main picture
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-500">
+                    This image will be used as the hotel cover photo.
+                  </p>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={addAnotherPicture}
-                  className="mb-[2px] flex h-8 w-8 items-center justify-center rounded-full bg-[#2B3FCB] text-white"
-                >
-                  +
-                </button>
               </div>
 
-              {anotherPictures.slice(1).map((img, index) => {
-                const actualIndex = index + 1;
+              <TextInput
+                placeholder="picture url"
+                value={mainPicture}
+                onChange={setMainPicture}
+              />
+            </div>
 
-                return (
-                  <div key={actualIndex} className="flex items-center gap-2">
-                    <div className="flex-1">
-                      <TextInput
-                        placeholder="picture url"
-                        value={img}
-                        onChange={(value) =>
-                          setAnotherPicture(actualIndex, value)
-                        }
-                      />
-                    </div>
+            <div className="rounded-[22px] border border-[#E5E7EB] bg-white p-4 shadow-sm">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-subdetail font-semibold text-[var(--color-text-primary)]">
+                    Additional pictures
+                  </h3>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Add up to 19 more image URLs.
+                  </p>
+                </div>
 
-                    <button
-                      type="button"
-                      onClick={() => removeAnotherPicture(actualIndex)}
-                      className="flex h-8 w-8 items-center justify-center rounded-full border border-[#FF9FA8] bg-white text-[#FF6B77]"
-                    >
-                      ×
-                    </button>
+                <span className="shrink-0 rounded-full bg-[#EEF2FF] px-3 py-1 text-xs font-semibold text-[#2B3FCB]">
+                  {anotherPictures.length}/19
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <TextInput
+                      placeholder="picture url"
+                      value={anotherPictures[0] ?? ''}
+                      onChange={(value) => setAnotherPicture(0, value)}
+                    />
                   </div>
-                );
-              })}
+
+                  <button
+                    type="button"
+                    onClick={addAnotherPicture}
+                    disabled={!canAddAnotherPicture}
+                    title={canAddAnotherPicture ? 'Add another picture' : 'Maximum 19 additional pictures'}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2B3FCB] text-lg font-semibold leading-none text-white shadow-sm transition hover:bg-[#1E2C8F] disabled:cursor-not-allowed disabled:bg-slate-300"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {anotherPictures.slice(1).map((img, index) => {
+                  const actualIndex = index + 1;
+
+                  return (
+                    <div key={actualIndex} className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <TextInput
+                          placeholder="picture url"
+                          value={img}
+                          onChange={(value) =>
+                            setAnotherPicture(actualIndex, value)
+                          }
+                        />
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => removeAnotherPicture(actualIndex)}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#FF9FA8] bg-white text-lg font-semibold leading-none text-[#FF6B77] transition hover:bg-[#FFF1F2]"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
