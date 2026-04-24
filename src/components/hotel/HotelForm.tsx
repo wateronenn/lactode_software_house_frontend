@@ -10,15 +10,16 @@ import { HOTEL_FACILITY_OPTIONS } from '@/src/constants/facilities';
 export interface HotelFormData {
   name: string;
   address: string;
+  location: string;
   province: string;
   district: string;
-  postalCode: string;
+  postalcode: string;
   description: string;
-  phone: string;
+  tel: string;
   email: string;
   ownerEmail: string;
   facilities: string[];
-  image: string[];
+  pictures: string[];
 }
 
 interface Props {
@@ -36,24 +37,25 @@ export default function HotelForm({
   onCancel,
 }: Props) {
   const normalizedInitialData: HotelFormData = useMemo(() => {
-    const initialImages = Array.isArray(initialData?.image)
-      ? initialData.image
-      : initialData?.image
-      ? [initialData.image as unknown as string]
+    const initialImages = Array.isArray(initialData?.pictures)
+      ? initialData.pictures
+      : initialData?.pictures
+      ? [initialData.pictures as unknown as string]
       : [];
 
     return {
       name: initialData?.name ?? '',
       address: initialData?.address ?? '',
+      location: initialData?.location ?? '',
       province: initialData?.province ?? '',
       district: initialData?.district ?? '',
-      postalCode: initialData?.postalCode ?? '',
+      postalcode: initialData?.postalcode ?? '',
       description: initialData?.description ?? '',
-      phone: initialData?.phone ?? '',
+      tel: initialData?.tel ?? '',
       email: initialData?.email ?? '',
       ownerEmail: initialData?.ownerEmail ?? '',
       facilities: initialData?.facilities ?? [],
-      image: initialImages.length > 0 ? initialImages : [''],
+      pictures: initialImages.length > 0 ? initialImages : [''],
     };
   }, [initialData]);
 
@@ -64,7 +66,7 @@ export default function HotelForm({
   }, [normalizedInitialData]);
 
   const setField = (
-    field: keyof Omit<HotelFormData, 'facilities' | 'image'>,
+    field: keyof Omit<HotelFormData, 'facilities' | 'pictures'>,
     value: string
   ) => {
     setForm((prev) => ({
@@ -73,31 +75,31 @@ export default function HotelForm({
     }));
   };
 
-  const mainPicture = form.image[0] ?? '';
-  const anotherPictures = form.image.slice(1);
+  const mainPicture = form.pictures[0] ?? '';
+  const anotherPictures = form.pictures.slice(1);
 
-  const previewImages = form.image.filter((img) => img.trim() !== '');
+  const previewImages = form.pictures.filter((img) => img.trim() !== '');
 
   const setMainPicture = (value: string) => {
     setForm((prev) => {
-      const nextImages = [...prev.image];
-      nextImages[0] = value;
+      const nextPictures = [...prev.pictures];
+      nextPictures[0] = value;
 
       return {
         ...prev,
-        image: nextImages,
+        pictures: nextPictures,
       };
     });
   };
 
   const setAnotherPicture = (index: number, value: string) => {
     setForm((prev) => {
-      const nextImages = [...prev.image];
-      nextImages[index + 1] = value;
+      const nextPictures = [...prev.pictures];
+      nextPictures[index + 1] = value;
 
       return {
         ...prev,
-        image: nextImages,
+        pictures: nextPictures,
       };
     });
   };
@@ -105,18 +107,18 @@ export default function HotelForm({
   const addAnotherPicture = () => {
     setForm((prev) => ({
       ...prev,
-      image: [...prev.image, ''],
+      pictures: [...prev.pictures, ''],
     }));
   };
 
   const removeAnotherPicture = (index: number) => {
     setForm((prev) => {
-      const nextImages = [...prev.image];
-      nextImages.splice(index + 1, 1);
+      const nextPictures = [...prev.pictures];
+      nextPictures.splice(index + 1, 1);
 
       return {
         ...prev,
-        image: nextImages.length > 0 ? nextImages : [''],
+        pictures: nextPictures.length > 0 ? nextPictures : [''],
       };
     });
   };
@@ -159,7 +161,7 @@ export default function HotelForm({
 
     onSubmit({
       ...form,
-      image: form.image.filter((img) => img.trim() !== ''),
+      pictures: form.pictures.filter((img) => img.trim() !== ''),
     });
   };
 
@@ -276,8 +278,8 @@ export default function HotelForm({
           <TextInput
             label="Phone"
             placeholder="+66 76 123 456"
-            value={form.phone}
-            onChange={(value) => setField('phone', value)}
+            value={form.tel}
+            onChange={(value) => setField('tel', value)}
           />
 
           <div className="md:col-span-3">
@@ -306,8 +308,8 @@ export default function HotelForm({
           <TextInput
             label="Postal Code"
             placeholder="12345"
-            value={form.postalCode}
-            onChange={(value) => setField('postalCode', value)}
+            value={form.postalcode}
+            onChange={(value) => setField('postalcode', value)}
           />
 
           <div className="md:col-span-3">
