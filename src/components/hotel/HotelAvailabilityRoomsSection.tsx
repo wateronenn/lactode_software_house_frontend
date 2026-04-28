@@ -13,6 +13,7 @@ type HotelAvailabilityRoomsSectionProps = {
   detailBasePath?: string;
   createRoomHref?: string;
   createRoomLabel?: string;
+  showAvailability?: boolean;
 };
 
 type RoomSearchFilters = {
@@ -95,7 +96,7 @@ export default function HotelAvailabilityRoomsSection({
           </div>
         ) : null}
 
-        <RoomCardList rooms={rooms} emptyMessage={emptyMessage} detailBasePath={detailBasePath} />
+        <RoomCardList rooms={rooms} emptyMessage={emptyMessage} detailBasePath={detailBasePath} showAvailability={hasFilters} />
       </section>
     </>
   );

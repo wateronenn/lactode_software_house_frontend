@@ -10,10 +10,21 @@ const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1566073771259-6a850609
 
 export default async function HotelDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+ searchParams?: Promise<{
+    checkIn?: string;
+    checkOut?: string;
+    guests?: string;
+  }>;
 }) {
   const { id } = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const hasQuery =
+    resolvedSearchParams?.checkIn &&
+    resolvedSearchParams?.checkOut;
 
   try {
     const [hotel, rooms] = await Promise.all([

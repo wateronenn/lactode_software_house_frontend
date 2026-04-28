@@ -8,12 +8,14 @@ type RoomCardListProps = {
   rooms?: Room[];
   emptyMessage?: string;
   detailBasePath?: string;
+  showAvailability?: boolean;
 };
 
 export default function RoomCardList({
   rooms,
   emptyMessage = 'No rooms available for this hotel yet.',
   detailBasePath = '/hotels',
+  showAvailability = false,
 }: RoomCardListProps) {
   const hasApiRooms = Array.isArray(rooms);
   const roomItems = hasApiRooms ? rooms : MOCK_ROOMS;
@@ -25,7 +27,7 @@ export default function RoomCardList({
   return (
     <div className="space-y-4">
       {roomItems.map((room) => (
-        <RoomCard key={room._id} room={room} detailBasePath={detailBasePath} />
+        <RoomCard key={room._id} room={room} detailBasePath={detailBasePath}  showAvailability={showAvailability}/>
       ))}
     </div>
   );
