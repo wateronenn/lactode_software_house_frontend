@@ -13,11 +13,11 @@ export default async function HotelDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams?: {
+ searchParams?: Promise<{
     checkIn?: string;
     checkOut?: string;
     guests?: string;
-  };
+  }>;
 }) {
   const { id } = await params;
   const resolvedSearchParams = await searchParams;
