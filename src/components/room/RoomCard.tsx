@@ -12,13 +12,14 @@ interface RoomCardProps {
   room: RoomCardInput;
   onDetail?: (room: RoomCardInput) => void;
   detailBasePath?: string;
+  showAvailability?: boolean;
 }
 
 function isApiRoom(room: RoomCardInput): room is Room {
   return 'roomType' in room;
 }
 
-export default function RoomCard({ room, onDetail, detailBasePath = '/hotels' }: RoomCardProps) {
+export default function RoomCard({ room, onDetail, detailBasePath = '/hotels' ,showAvailability = false}: RoomCardProps) {
   const hotelRef = isApiRoom(room) ? room.hotelID ?? room.hotel : null;
   const hotelId =
     typeof hotelRef === 'string'
@@ -32,13 +33,15 @@ export default function RoomCard({ room, onDetail, detailBasePath = '/hotels' }:
 
   const name = isApiRoom(room) ? room.roomType : room.name;
   const available = isApiRoom(room) ? room.available ?? room.availableNumber ?? room.avaliableNumber ?? 0 : room.available;
+  const isUnavailable = available === 0;
   const maxAdults = isApiRoom(room) ? room.people : room.maxAdults;
   const image = isApiRoom(room)
     ? room.image ?? room.picture?.[0] ?? ROOM_FALLBACK_IMAGE
     : room.image ?? ROOM_FALLBACK_IMAGE;
 
   return (
-    <div className="flex items-center gap-5 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm" data-testid={`room-card-${room._id}`}>
+    <div className={`flex items-center gap-5 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm
+    ${isUnavailable ? "opacity-50 grayscale pointer-events-none cursor-not-allowed" : ""}`} data-testid={`room-card-${room._id}`}>
       <div className="flex h-28 w-36 flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-gray-300 bg-gray-50">
         <img
           src={image}
@@ -55,7 +58,14 @@ export default function RoomCard({ room, onDetail, detailBasePath = '/hotels' }:
       <div className="flex-1">
         <h3 className="font-semibold text-gray-900">{name}</h3>
         <p className="mt-0.5 text-sm text-gray-500">{room.bedType}</p>
-        <p className="text-sm text-gray-500">available : {available}</p>
+                {showAvailability && (
+          <p className="text-sm text-gray-500">
+            available : {available}
+          </p>
+        )}
+        <p className={`text-sm ${isUnavailable ? "text-red-500 font-semibold" : "text-gray-500"}`}>
+          {isUnavailable ? "Fully booked" : ''}
+        </p>
         <div className="mt-2 flex items-center gap-1.5 text-sm text-gray-600">
           <User className="h-4 w-4" />
           max {maxAdults} adults

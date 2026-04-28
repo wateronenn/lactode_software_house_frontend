@@ -180,10 +180,6 @@ export default function RoomDetailPage() {
               {bedTypeLabel} Size Bed : {room.bed}
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <Check className="h-6 w-6 text-brand-500" />
-            <span>Room Available : {displayAvailable}</span>
-          </div>
         </div>
 
         <section className="space-y-3">
